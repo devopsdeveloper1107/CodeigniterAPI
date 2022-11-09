@@ -1,0 +1,72 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Headers:Content-Type, Accept, Authorization, X-Requested-With, X-Auth-Token, Origin,Application");
+
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Countryapi extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	 
+		 
+	public function __construct()
+    {
+		parent::__construct();
+		error_reporting(E_ALL & ~E_NOTICE);
+		date_default_timezone_set('asia/kolkata');
+		$date = date('Y-m-d h:i:s', time());
+		$this->load->helper(array('url','html','form','security'));
+		$this->load->library('session','parser');
+		$this->load->library('form_validation');
+		$this->load->library("pagination");
+		$this->load->database();
+		$this->load->model('CountryapiModel');
+    }
+	
+	public function countrydata()
+	{    
+	     
+		 $data['getcountry'] = $this->CountryapiModel->getcountry();				 
+		 echo json_encode($data['getcountry']);			
+		 exit();
+	   
+	}
+	
+	public function statedata($id)
+	{    	     
+		 $data['getstate'] = $this->CountryapiModel->getstate($id);				 
+		 echo json_encode($data['getstate']);			
+		 exit();
+	   
+	}
+	
+	public function countrystatedata()
+	{    	     
+		 $data= json_decode(file_get_contents('php://input'),true);
+		 echo "get  county and state";
+		 
+		 print_r($data);
+	   
+	}
+
+	
+	
+	
+	
+}
