@@ -1,0 +1,30 @@
+<?php 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class CountryapiModel extends CI_Model
+{
+
+	function __construct()
+	{
+	 ob_start();
+	 parent::__construct();
+	 date_default_timezone_set('asia/kolkata');
+	 $this->load->database();
+    }
+   public function getcountry() { 
+        $this->db->select('*');
+        $this->db->from('tbl_country');				
+		$query = $this->db->get();
+		return $query->result() ;		      
+    } 	
+	  public function getstate($id){	
+		$this->db->select('*');
+        $this->db->from('tbl_state');
+		$this->db->where('countryid', $id);				
+		$query = $this->db->get();
+		return $query->result() ;		      
+    } 		     
+     
+}
+
+?>
