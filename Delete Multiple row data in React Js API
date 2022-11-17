@@ -1,0 +1,85 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Headers: access");
+header("Content-Type: *");
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header("Access-Control-Allow-Headers: Content-Type, Accept, Authorization, X-Requested-With, X-Auth-Token, Origin, Application");
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Userdata extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	 		 
+	public function __construct()
+    {
+		parent::__construct();
+		error_reporting(E_ALL & ~E_NOTICE);
+		date_default_timezone_set('asia/kolkata');
+		$date = date('Y-m-d h:i:s', time());
+		$this->load->helper(array('url','html','form','security'));
+		$this->load->library('session','parser');
+		$this->load->library('form_validation');
+		$this->load->library("pagination");
+		$this->load->database();
+		$this->load->model('UserdataModel');
+    }
+   
+   public function getuser()
+   {
+   $data['getuser']= $this->UserdataModel->getuser();   
+   echo json_encode($data['getuser']);   
+   }
+   
+   public function userdelete($userid)
+   {
+   $result = $this->UserdataModel->delete_user($userid);
+   if($result )
+   {
+   $responsce= array('msg'=>"User Record deleted successfully");
+   echo json_encode($responsce);   
+   } else {
+   $responsce= array('msg'=>"Invalid User ID");
+   echo json_encode($responsce);
+   }   
+   }
+   
+   public function deletecheckboxuser()
+   {    
+	$data= json_decode(file_get_contents('php://input'),true);
+	//echo "all delete"; 
+	//print_r($data);
+	//die;	 
+	$result = $this->UserdataModel->deletecheckbox($data);		 
+	if($result)
+	{
+	$response= array('msg'=>"User Data Deleted Successfully");
+	echo json_encode($response);
+	} else {
+	$response= array('msg'=>"Invalid Data");
+	echo json_encode($response);
+	}	   
+   } 
+ 
+	
+	
+	
+	
+	
+}
+?>
